@@ -1,4 +1,5 @@
-# SPITS OUT DAILY, WEEKLY MEAL PLAN
+# OUTPUTS DAILY, WEEKLY MEAL PLAN
+# USE OBJECTS... MEAL, DAY, ETC.
 age = 38
 height = 72.5
 height_cm = height * 2.54
@@ -14,29 +15,37 @@ print(f"TDEE: {int(tdee)} calories")
 # MINIMUM CARB INTAKE
 # MINIMUM FAT INTAKE
 
-goal = "FL"  # "fatloss" / "gain" / "maintenance"
-percent_bw = 0.008  # RATE OF GAIN / LOSS
+goal = "G"  # "FL - fatloss" / "G - gain" / "M - maintenance"
+percent_bw = -0.006  # RATE OF GAIN / LOSS PER WEEK
+# rating = 
 weekly_rate = percent_bw * weight
 cal_adjust = (weekly_rate * 3500) / 7
 
 print(f"\nGAIN/LOSS RATE: {weekly_rate:.2f} lbs. per week")
+# print(f"RATING: {rating}")  how easy or hard the given rate will be
 print(f"CALORIE ADJUSTMENT: {int(cal_adjust)} calories")
 
 pro_per_lb = 0.9
 
-day_type = "N"  # "non-training" / "light" / "moderate" / "heavy"
+day_type = "N"  # "N - non-training" / "L - light" / "M - moderate" / "H - heavy"
 
 calories = 0
 protein = weight * pro_per_lb
 carbs = 0
 fat = 0
 
+# DAILY ACTIVTY LEVEL
+# reverse-engineer this
+cals = {"N": 1900, "L": 2100, "M": 2400, "H": 2600}
+
+# SEE PG. 119, TABLE 10.1
 if day_type == "N":
-  calories = bmr * 1.2 + cal_adjust
+  # calories = bmr * 1.2 + cal_adjust
+  calories = cals["N"] + cal_adjust
   carbs = weight * 0.5
   fat = (calories - protein * 4 - carbs * 4) / 9
 elif day_type == "L":
-  calories = bmr * 1.5 + cal_adjust
+  calories = cals["L"] + cal_adjust
   carbs = weight
   fat = (calories - protein * 4 - carbs * 4) / 9
 
@@ -45,12 +54,10 @@ c_prc = int((carbs * 4 / calories) * 100)
 f_prc = int((fat * 9 / calories) * 100)
 
 print("\nDAILY:")
-print(f"{int(calories)} calories")
+# print(f"{int(calories)} calories")
 print(f"{int(protein)}g protein ({p_prc}%)")
 print(f"{int(carbs)}g carbs ({c_prc}%)")
 print(f"{int(fat)}g fat ({f_prc}%)")
-
-# SHOW PERCENT OF EACH MACRO?
 
 num_meals = 5
 # wake_time
@@ -108,14 +115,14 @@ if day_type == "N":
         print(f"{int(meal_pro)}g protein")
         print(f"{int(meal_carbs)}g carbs")
         print(f"{int(meal_fat)}g fat")
-        print(f"{int(meal_cals)} calories")
+        # print(f"{int(meal_cals)} calories")
 else:
     for i in range(1, num_meals + 1):
         print(f"\nMEAL {str(i)}:")
         print(f"{int(meal_pro)}g protein")
         print(f"{int(carbo[i])}g carbs")
         print(f"{int(fatso[i])}g fat")
-        print(f"{int(meal_pro * 4 + carbo[i] * 4 + fatso[i] * 9)} calories")
+        # print(f"{int(meal_pro * 4 + carbo[i] * 4 + fatso[i] * 9)} calories")
 
 # "MEAL 1 (AFTER WORKOUT)"
 
@@ -128,24 +135,18 @@ else:
 10g extra virgin olive oil
 """
 
+# DROPDOWN TO CHOOSE FROM A LIST OF MEALS
+# ALERT IF ANY MICRONUTRIENTS ARE SIGNIFICANTLY OFF
 
-# ADJUST MACROS WEEKLY BASED ON BODYWEIGHT CHANGES
+# FILE IO... output text file with all meals for week
+
+
+# ADJUST MACROS WEEKLY BASED ON BODYWEIGHT CHANGES... see page 140
 # END OF WEEK:
-current_cals = 0
-avg_weight = 0
-prev_weight = 0
-wt_delta = avg_weight - prev_weight
+# current_cals = calories
+# avg_weight = 0
+# prev_weight = 0
+# wt_delta = avg_weight - prev_weight
+# adjust = weekly_rate - wt_delta
+# cal_adjust += adjust
 
-
-
-# CALCULATE DAILY MACROS A LA SAILRABBIT
-# CURRENT MACROS... LOG EVERYTHING?
-
-# REVERSE-ENGINEER TDEE A LA N-SUNS
-# ADJUST WEEKLY MACROS
-
-# KEEP RP VERSION, MAKE A CUSTOM VERSION (adjust macros as desired)
-# CALCULATE CALORIES BURNED DURING LIFTING SESSIONS
-# CALCULATE NUTRIENT NEEDS FOLLOWING RUNNING
-
-# CREATE WEB APP WITH DROPDOWNS

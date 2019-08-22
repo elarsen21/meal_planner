@@ -197,7 +197,8 @@ for day, day_type in week.items():
 # DROPDOWN TO CHOOSE FROM A LIST OF MEALS
 # ALERT IF ANY MICRONUTRIENTS ARE SIGNIFICANTLY OFF
 
-# OUTPUT EACH DAY SEPARATELY? ONE SHEET OF MEALS FOR THE DAY, e.g. plan.txt, monday.txt, tuesday.txt, ...
+# OUTPUT EACH DAY SEPARATELY
+# ONE SHEET OF MEALS FOR THE DAY, e.g. plan.txt, monday.txt, tuesday.txt, ...
 # SEPARATE MACROS FROM MEALS
 with open("daily_meals.txt", "w") as f:
     f.write(output)

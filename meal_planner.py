@@ -1,5 +1,5 @@
 # OUTPUTS WEEKLY MEAL PLAN
-# USE OBJECTS... DAY, MEAL, WEEK, PLAN(average weight vs. desired gain rate) ETC.
+# USE OBJECTS... MEAL, DAY, WEEK (output day files, weekly review), PLAN(average weight vs. desired gain rate) ETC.
 # CHECK AGAINST TEMPLATE SPREADSHEETS
 age = 38
 height = 72.5
@@ -11,11 +11,11 @@ activity = 1.5
 bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5  
 tdee = bmr * activity
 
-output = ""
+plan_out = ""
 
-output += "WEEKLY PLAN:"
-output += f"\n\nBMR: {int(bmr)} calories"
-output += f"\nTDEE: {int(tdee)} calories"
+plan_out += "WEEKLY PLAN:"
+plan_out += f"\n\nBMR: {int(bmr)} calories"
+plan_out += f"\nTDEE: {int(tdee)} calories"
 # MINIMUM PROTEIN INTAKE?
 # MINIMUM CARB INTAKE
 # MINIMUM FAT INTAKE
@@ -31,22 +31,13 @@ else:
 weekly_rate = percent_bw * weight
 cal_adjust = (weekly_rate * 3500) / 7
 
-output += f"\n\nGAIN/LOSS RATE: {weekly_rate:.2f} lbs. per week"
-output += f"\nDIFFICULTY RATING: {rating}"
-output += f"\nCALORIE ADJUSTMENT: {int(cal_adjust)} calories"
+plan_out += f"\n\nGAIN/LOSS RATE: {weekly_rate:.2f} lbs. per week"
+plan_out += f"\nDIFFICULTY RATING: {rating}"  # ADD MORE COLOR HERE
+plan_out += f"\nCALORIE ADJUSTMENT: {int(cal_adjust)} calories"
 
 # SEE PAGE 29
 pro_per_lb = 0.9
 
-# TODO: SHOW GRAMS OF EACH FOOD FOR MEALS, e.g.
-"""
-97g chicken breast
-137g brown rice
-30g salsa verde
-150g brocolli
-10g extra virgin olive oil
-lemon pepper seasoning
-"""
 proteins = {
     "chicken breast": 3.24,
     "casein powder": 1.2,
@@ -63,13 +54,12 @@ fats = {
     "extra virgin olive oil": 1}
 seasoning = ["chile lime", "curry powder", "lemon pepper", "chipotle", "bagel", "onion salt"]
 
-# SAME MEALS EVERY DAY
+# SAME MEALS EACH DAY
 meals = [["chicken breast", "sweet potato", "no", "spinach", "almond butter", "curry powder"],
         ["chicken breast", "brown rice", "salsa verde", "brocolli", "extra virgin olive oil", "lemon pepper"],
         ["chicken breast", "sweet potato", "hot salsa", "green beans", "walnuts", "onion salt"],
         ["chicken breast", "brown rice", "no", "bell peppers", "extra virgin olive oil", "chile lime"],
         ["casein powder", "brown rice", "no", "no", "almond butter", "bagel"]]
-
 
 week = {
     "MONDAY": "Non-",
@@ -88,6 +78,9 @@ protein = weight * pro_per_lb
 
 # SEE PG. 119, TABLE 10.1
 for day, day_type in week.items():
+
+    output = ""
+
     if day_type == "Non-":
         calories = bmr * 1.2 + cal_adjust
         carbs = weight * 0.5
@@ -107,13 +100,13 @@ for day, day_type in week.items():
     c_prc = int((carbs * 4 / calories) * 100)
     f_prc = int((fat * 9 / calories) * 100)
 
-    output += f"\n\n{day}:"
-    output += f"\n{day_type} lifting day"
+    plan_out += f"\n\n{day}:"
+    plan_out += f"\n{day_type} lifting day"
     # output += f"\n{act_level} activity level"
     # output += f"\n{int(calories)} calories"
-    output += f"\n{int(protein)}g protein ({p_prc}%)"
-    output += f"\n{int(carbs)}g carbs ({c_prc}%)"
-    output += f"\n{int(fat)}g fat ({f_prc}%)"
+    plan_out += f"\n{int(protein)}g protein ({p_prc}%)"
+    plan_out += f"\n{int(carbs)}g carbs ({c_prc}%)"
+    plan_out += f"\n{int(fat)}g fat ({f_prc}%)"
 
     num_meals = 5
     # wake_time
@@ -167,32 +160,41 @@ for day, day_type in week.items():
         fatso[5] = 0.2 * fat
         fatso[6] = 0.2 * fat
 
+    output += f"{day}:"
+
     if day_type == "Non-":
         for i in range(num_meals):
-            output += f"\n\nMEAL {str(i + 1)}:"
-            output += f"\n{int(meal_pro)}g protein"
-            output += f"\n{int(meal_carbs)}g carbs"
-            output += f"\n{int(meal_fat)}g fat"
+            plan_out += f"\n\nMEAL {str(i + 1)}:"
+            plan_out += f"\n{int(meal_pro)}g protein"
+            plan_out += f"\n{int(meal_carbs)}g carbs"
+            plan_out += f"\n{int(meal_fat)}g fat"
             # print(f"{int(meal_cals)} calories")
 
+            output += f"\n\nMEAL {str(i + 1)}:"
             output += f"\n\n{int(meal_pro * proteins[meals[i][0]])}g {meals[i][0]}"
             output += f"\n{int(meal_carbs * carbos[meals[i][1]])}g {meals[i][1]}"
             output += f"\n{int(meal_fat * fats[meals[i][-2]])}g {meals[i][-2]}"
 
     else:
         for i in range(num_meals):
-            output += f"\n\nMEAL {str(i + 1)}:"
-            output += f"\n{int(meal_pro)}g protein"
-            output += f"\n{int(carbo[i + 1])}g carbs"
-            output += f"\n{int(fatso[i + 1])}g fat"
+            plan_out += f"\n\nMEAL {str(i + 1)}:"
+            plan_out += f"\n{int(meal_pro)}g protein"
+            plan_out += f"\n{int(carbo[i + 1])}g carbs"
+            plan_out += f"\n{int(fatso[i + 1])}g fat"
             # print(f"{int(meal_pro * 4 + carbo[i] * 4 + fatso[i] * 9)} calories")
 
+            output += f"\n\nMEAL {str(i + 1)}:"
             output += f"\n\n{int(meal_pro * proteins[meals[i][0]])}g {meals[i][0]}"
             output += f"\n{int(carbo[i + 1] * carbos[meals[i][1]])}g {meals[i][1]}"
             output += f"\n{int(fatso[i + 1] * fats[meals[i][-2]])}g {meals[i][-2]}"
 
+    with open(f"{day}.txt", "w") as f:
+        f.write(output)
+
 # "MEAL 1 (AFTER WORKOUT)"
 
+with open("weekly_plan.txt", "w") as f:
+    f.write(plan_out)
 
 # DROPDOWN TO CHOOSE FROM A LIST OF MEALS
 # ALERT IF ANY MICRONUTRIENTS ARE SIGNIFICANTLY OFF
@@ -200,8 +202,6 @@ for day, day_type in week.items():
 # OUTPUT EACH DAY SEPARATELY
 # ONE SHEET OF MEALS FOR THE DAY, e.g. plan.txt, monday.txt, tuesday.txt, ...
 # SEPARATE MACROS FROM MEALS
-with open("daily_meals.txt", "w") as f:
-    f.write(output)
 
 # TODO: WEEKLY REVIEW:
 # ADJUST MACROS WEEKLY BASED ON BODYWEIGHT CHANGES... see page 140

@@ -1,5 +1,6 @@
-# OUTPUTS DAILY, WEEKLY MEAL PLAN
+# OUTPUTS WEEKLY MEAL PLAN
 # USE OBJECTS... MEAL, DAY, ETC.
+# CHECK AGAINST TEMPLATE SPREADSHEETS
 age = 38
 height = 72.5
 height_cm = height * 2.54
@@ -9,9 +10,12 @@ activity = 1.5
 bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5  # MIFFLIN-ST. JEOR FORMULA
 tdee = bmr * activity
 
-print(f"BMR: {int(bmr)} calories")
-print(f"TDEE: {int(tdee)} calories")
-# MINIMUM PROTEIN INTAKE
+output = ""
+
+output += "WEEKLY PLAN:"
+output += f"\n\nBMR: {int(bmr)} calories"
+output += f"\nTDEE: {int(tdee)} calories"
+# MINIMUM PROTEIN INTAKE?
 # MINIMUM CARB INTAKE
 # MINIMUM FAT INTAKE
 
@@ -26,10 +30,11 @@ else:
 weekly_rate = percent_bw * weight
 cal_adjust = (weekly_rate * 3500) / 7
 
-print(f"\nGAIN/LOSS RATE: {weekly_rate:.2f} lbs. per week")
-print(f"DIFFICULTY RATING: {rating}")  # How easy or hard the given rate will be
-print(f"CALORIE ADJUSTMENT: {int(cal_adjust)} calories")
+output += f"\nGAIN/LOSS RATE: {weekly_rate:.2f} lbs. per week"
+output += f"\nDIFFICULTY RATING: {rating}"
+output += f"\nCALORIE ADJUSTMENT: {int(cal_adjust)} calories"
 
+# SEE PAGE 29
 pro_per_lb = 0.9
 
 week = {
@@ -42,7 +47,6 @@ week = {
         "SUNDAY" : "Light",
         }
 
-# "Non-training" / "Light" / "Moderate" / "Heavy"
 # SEPARATE DAILY ACTIVITY LEVEL AND DAY_TYPE
 # "Mildly active" / "Moderately active" / "Heavily active" / "Very heavily active"
 
@@ -62,7 +66,6 @@ for day, day_type in week.items():
     elif day_type == "Heavy":
         calories = bmr * 1.725 + cal_adjust
         carbs = weight * 2.0
-    # OUTPUT
 
     fat = (calories - protein * 4 - carbs * 4) / 9
 
@@ -70,13 +73,12 @@ for day, day_type in week.items():
     c_prc = int((carbs * 4 / calories) * 100)
     f_prc = int((fat * 9 / calories) * 100)
 
-    # for day in week:
-    print(f"\n{day}:")
-    print(f"{day_type} training day")
-    print(f"{int(calories)} calories")
-    print(f"{int(protein)}g protein ({p_prc}%)")
-    print(f"{int(carbs)}g carbs ({c_prc}%)")
-    print(f"{int(fat)}g fat ({f_prc}%)")
+    output += f"\n\n{day}:"
+    output += f"\n{day_type} lifting day"
+    # output += f"\n{int(calories)} calories"
+    output += f"\n{int(protein)}g protein ({p_prc}%)"
+    output += f"\n{int(carbs)}g carbs ({c_prc}%)"
+    output += f"\n{int(fat)}g fat ({f_prc}%)"
 
     num_meals = 5
     # wake_time
@@ -88,6 +90,7 @@ for day, day_type in week.items():
 
     carbo = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0}
 
+    # TODO: CHANGE TO MAKE FIRST MEAL THE POST-WORKOUT MEAL
     if num_meals == 4 and day_type != "N":
         carbo[1] = 0.25 * carbs
         carbo[2] = 0.35 * carbs
@@ -130,41 +133,45 @@ for day, day_type in week.items():
 
     if day_type == "Non-":
         for i in range(1, num_meals + 1):
-            print(f"\nMEAL {str(i)}:")
-            print(f"{int(meal_pro)}g protein")
-            print(f"{int(meal_carbs)}g carbs")
-            print(f"{int(meal_fat)}g fat")
+            output += f"\n\nMEAL {str(i)}:"
+            output += f"\n{int(meal_pro)}g protein"
+            output += f"\n{int(meal_carbs)}g carbs"
+            output += f"\n{int(meal_fat)}g fat"
             # print(f"{int(meal_cals)} calories")
     else:
         for i in range(1, num_meals + 1):
-            print(f"\nMEAL {str(i)}:")
-            print(f"{int(meal_pro)}g protein")
-            print(f"{int(carbo[i])}g carbs")
-            print(f"{int(fatso[i])}g fat")
+            output += f"\n\nMEAL {str(i)}:"
+            output += f"\n{int(meal_pro)}g protein"
+            output += f"\n{int(carbo[i])}g carbs"
+            output += f"\n{int(fatso[i])}g fat"
             # print(f"{int(meal_pro * 4 + carbo[i] * 4 + fatso[i] * 9)} calories")
 
 # "MEAL 1 (AFTER WORKOUT)"
 
-# SHOW GRAMS OF EACH FOOD FOR MEALS, e.g.
+# TODO: SHOW GRAMS OF EACH FOOD FOR MEALS, e.g.
 """ 
 97g chicken breast
 137g brown rice
 30g salsa verde
 150g brocolli
 10g extra virgin olive oil
+lemon pepper seasoning
 """
+proteins = {"chicken breast" : 0.594, "casein powder" : 0.592, "Greek yogurt" : 0.591, "ground beef" : 0.593}
+carbos = {"brown rice" : 0.461, "sweet potato" : 0.462}
+sauce = ["salsa verde", "hot salsa", "buffalo sauce"]
+vegs = ["spinach", "brocolli", "green beans", "bell peppers"]
+fats = {"avocado" : 0.321, "almond butter" : 0.322, "almonds" : 2, "walnuts" : 1.5, "extra virgin olive oil" : 0.321}
+seasoning = ["chile lime", "curry powder", "lemon pepper", "chipotle", "bagel"]
 
 # DROPDOWN TO CHOOSE FROM A LIST OF MEALS
 # ALERT IF ANY MICRONUTRIENTS ARE SIGNIFICANTLY OFF
 
-# FILE IO... output text file with all meals for week
 with open("daily_meals.txt", "w") as f:
-    pass
-    # PUT ALL PRINT STATEMENTS IN HERE, OR IN A FUNCTION
+    f.write(output)
 
-
+# TODO: WEEKLY REVIEW:
 # ADJUST MACROS WEEKLY BASED ON BODYWEIGHT CHANGES... see page 140
-# END OF WEEK:
 # current_cals = calories
 # avg_weight = 0
 # prev_weight = 0

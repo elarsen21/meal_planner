@@ -1,13 +1,15 @@
-# OUTPUTS WEEKLY MEAL PLAN
-# USE OBJECTS... MEAL, DAY, WEEK (output day files, weekly review), PLAN(average weight vs. desired gain rate) ETC.
-# CHECK AGAINST TEMPLATE SPREADSHEETS
+# TODO: Use objects... 
+# Meal, Day, Week (output day files, weekly review), Plan (average weight vs. desired gain rate) etc.
+# Check against template spreadsheets
+
+# TODO: Take inputs from the command line
 age = 38
 height = 72.5
 height_cm = height * 2.54
 weight = 175
 weight_kg = weight * 0.453592
 activity = 1.5
-# MIFFLIN-ST. JEOR FORMULA:
+# Mifflin-St. Jeor formula:
 bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5  
 tdee = bmr * activity
 
@@ -16,12 +18,12 @@ plan_out = ""
 plan_out += "WEEKLY PLAN:"
 plan_out += f"\n\nBMR: {int(bmr)} calories"
 plan_out += f"\nTDEE: {int(tdee)} calories"
-# MINIMUM PROTEIN INTAKE?
-# MINIMUM CARB INTAKE
-# MINIMUM FAT INTAKE
+# Show minimum protein intake?
+# Show minimum carb intake?
+# Show minimum fat intake?
 
-percent_bw = -0.006  # RATE OF GAIN / LOSS PER WEEK
-# REFINE THIS
+percent_bw = -0.006  # Rate of gain / loss per week
+# Refine rating with explanation
 rating = ""
 if -0.0075 > percent_bw > 0.00333:
     rating = "EASY"
@@ -32,10 +34,10 @@ weekly_rate = percent_bw * weight
 cal_adjust = (weekly_rate * 3500) / 7
 
 plan_out += f"\n\nGAIN/LOSS RATE: {weekly_rate:.2f} lbs. per week"
-plan_out += f"\nDIFFICULTY RATING: {rating}"  # ADD MORE COLOR HERE
+plan_out += f"\nDIFFICULTY RATING: {rating}"  
 plan_out += f"\nCALORIE ADJUSTMENT: {int(cal_adjust)} calories"
 
-# SEE PAGE 29
+# see pg. 29
 pro_per_lb = 0.9
 
 proteins = {
@@ -54,7 +56,7 @@ fats = {
     "extra virgin olive oil": 1}
 seasoning = ["chile lime", "curry powder", "lemon pepper", "chipotle", "bagel", "onion salt"]
 
-# SAME MEALS EACH DAY
+# Same meals each day:
 meals = [["chicken breast", "sweet potato", "no", "spinach", "almond butter", "curry powder"],
         ["chicken breast", "brown rice", "salsa verde", "brocolli", "extra virgin olive oil", "lemon pepper"],
         ["chicken breast", "sweet potato", "hot salsa", "green beans", "walnuts", "onion salt"],
@@ -71,12 +73,12 @@ week = {
     "SUNDAY": "Light",
 }
 
-# ADD DAILY ACTIVITY LEVEL
+# TODO: Add daily activity level
 # "Mildly active" / "Moderately active" / "Heavily active" / "Very heavily active"
 
 protein = weight * pro_per_lb
 
-# SEE PG. 119, TABLE 10.1
+# see pg. 119, Table 10.1
 for day, day_type in week.items():
 
     output = ""
@@ -119,7 +121,7 @@ for day, day_type in week.items():
 
     carbo = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
 
-    # TODO: ADD WORKOUT TIME SCENARIOS
+    # TODO: Add workout time scenarios
     if num_meals == 4 and day_type != "N":
         carbo[1] = 0.35 * carbs
         carbo[2] = 0.25 * carbs
@@ -193,23 +195,23 @@ for day, day_type in week.items():
 
 # "MEAL 1 (AFTER WORKOUT)"
 
+# https://realpython.com/pdf-python/
 with open("weekly_plan.txt", "w") as f:
     f.write(plan_out)
 
-# DROPDOWN TO CHOOSE FROM A LIST OF MEALS
-# ALERT IF ANY MICRONUTRIENTS ARE SIGNIFICANTLY OFF
+endOfWeek = False
 
-# OUTPUT EACH DAY SEPARATELY
-# ONE SHEET OF MEALS FOR THE DAY, e.g. plan.txt, monday.txt, tuesday.txt, ...
-# SEPARATE MACROS FROM MEALS
+# TODO: Weekly update
+# Adjust macros weekly based on bodyweight changes... see page 140
+if endOfWeek:
+    avg_weight = input("Average weight this week: ")
+    wt_delta = avg_weight - prev_weight
+    adjust = weekly_rate - wt_delta
+    cal_adjust += adjust
+    prev_weight = avg_weight
+    # new_week()
 
-# TODO: WEEKLY REVIEW:
-# ADJUST MACROS WEEKLY BASED ON BODYWEIGHT CHANGES... see page 140
-# current_cals = calories
-# avg_weight = 0
-# prev_weight = 0
-# wt_delta = avg_weight - prev_weight
-# adjust = weekly_rate - wt_delta
-# cal_adjust += adjust
+# TODO: Menu option to end plan
 
-# prev_weight = avg_weight
+# Webapp: dropdowns to select options
+
